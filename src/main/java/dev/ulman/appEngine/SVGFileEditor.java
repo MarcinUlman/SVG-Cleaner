@@ -16,7 +16,7 @@ public class SVGFileEditor implements IFileEditor {
     public void clearFile(File SVGFile) {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(SVGFile));
-            String headerLines = getHeaderString(reader);
+            String headerLines = getStringToWrite(reader);
             reader.close();
 
             File fileToWrite = null;
@@ -44,7 +44,7 @@ public class SVGFileEditor implements IFileEditor {
         writer.close();
     }
 
-    private String getHeaderString(BufferedReader reader) throws IOException {
+    private String getStringToWrite(BufferedReader reader) throws IOException {
         StringBuilder linesToOut = new StringBuilder();
         String line = "";
         boolean isHeader = false, isPath = false;;
@@ -66,15 +66,17 @@ public class SVGFileEditor implements IFileEditor {
                 tabLength = line.indexOf("<path");
                 linesToOut.append(line).append("\n");
             }
-            if (isPath && line.endsWith("/>")) isPath = false;
+            if (isPath && line.contains("/>")) {
+                isPath = false;
+                for (int i = 0; i < tabLength; i++) {
+                    linesToOut.append(" ");
+                }
+                linesToOut.append("/>\n");
+            }
             if (isPath &&  line.contains("d=")) linesToOut.append(line).append("\n");
 
             line = reader.readLine();
         }
-        for (int i = 0; i < tabLength; i++) {
-            linesToOut.append(" ");
-        }
-        linesToOut.append("/>\n");
         linesToOut.append("</svg>");
         return linesToOut.toString();
     }
