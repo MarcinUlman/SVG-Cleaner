@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IFileFinder {
 
-    File findFileByPath(String pathToFile) throws FileNotSupportExceptions;
+    File findFileByPath(String pathToFile) throws FileNotSupportExceptions, FileNotFoundException;
 
     List<File> findFilesByDirectory() throws FileNotFoundException;
     List<File> findFilesByDirectory(String pathToFileFolder) throws FileNotFoundException;

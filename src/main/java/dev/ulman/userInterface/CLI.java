@@ -1,9 +1,9 @@
 package dev.ulman.userInterface;
 
-import dev.ulman.appEngine.SVGFileEditor;
 import dev.ulman.appEngine.FileFinder;
 import dev.ulman.appEngine.IFileEditor;
 import dev.ulman.appEngine.IFileFinder;
+import dev.ulman.appEngine.SVGFileEditor;
 import dev.ulman.exceptions.FileNotSupportExceptions;
 import org.apache.commons.cli.*;
 
@@ -60,15 +60,16 @@ public class CLI {
                 if (pathToDirectory == null) listOfFiles = fileFinder.findFilesByDirectory();
                 else listOfFiles = fileFinder.findFilesByDirectory(pathToDirectory[0]);
                 fileEditor.clearListOfFiles(listOfFiles);
-            }
+            } else throw new MissingArgumentException("Missing argument");
         } catch(MissingArgumentException e){
-            System.err.println("Sorry but you miss an argument. Try --help");
+            System.err.println(e.getMessage());
+            System.err.println("Try --help");
         } catch(ParseException e){
             e.printStackTrace();
-        } catch (FileNotSupportExceptions fileNotSupportExceptions) {
-            fileNotSupportExceptions.printStackTrace();
+        } catch (FileNotSupportExceptions e) {
+            System.err.println(e.getMessage());
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
         }
     }
 }
